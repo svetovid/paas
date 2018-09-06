@@ -5,9 +5,9 @@ namespace web4fancyproj.SignalR
 {
     public class EventPusher : IEventPusher
     {
-        private IHubContext<EchoHub> _hubContext;
+        private readonly IHubContext<PaymentHub> _hubContext;
 
-        public EventPusher(IHubContext<EchoHub> hubContext)
+        public EventPusher(IHubContext<PaymentHub> hubContext)
         {
             _hubContext = hubContext;
         }
@@ -16,7 +16,7 @@ namespace web4fancyproj.SignalR
         {
             Console.WriteLine("Event pusher - payment updated: {0}", status);
             
-            _hubContext.Clients.Client(connectionId).SendAsync("UpdateStatus", status);
+           _hubContext.Clients.All.SendAsync("UpdateStatus", status);
         }
     }
 }

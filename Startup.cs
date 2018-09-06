@@ -26,7 +26,7 @@ namespace web4fancyproj
 
             services.AddSignalR();
 
-            services.AddTransient<IEventPusher, EventPusher>();
+            services.AddSingleton<IEventPusher, EventPusher>();
             // services.AddTransient<IHubContext<EchoHub>, HubContext<EchoHub>>();
 
             var serviceProvider = services.BuildServiceProvider();
@@ -64,7 +64,7 @@ namespace web4fancyproj
             });
 
             app.UseSignalR(routes => {
-                routes.MapHub<EchoHub>("/hubs/echo");
+                routes.MapHub<PaymentHub>("/hubs/payment");
             }); 
 
             app.UseSpa(spa =>

@@ -14,15 +14,15 @@ export class PaymentComponent implements OnInit {
   ngOnInit(): void {
     let builder = new HubConnectionBuilder();
     
-    this.hubConnection = builder.withUrl("/hubs/echo").build();
+    this.hubConnection = builder.withUrl("/hubs/payment").build();
 
     this.hubConnection.on("UpdateStatus", status => {
       alert(status);
       this.messages.push(`Current payment status: ${status} at ${new Date()}`);
     });
 
-    //this.hubConnection.onclose(err => alert("Error"));
-
+    this.hubConnection.onclose(err => this.messages.push(`Connection closed: ${err.message} at ${new Date()}`));
+    //this.hubConnection.serverTimeoutInMilliseconds = 300000;
     this.hubConnection.start();
   }
 

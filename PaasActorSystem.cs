@@ -1,3 +1,4 @@
+using System;
 using Akka.Actor;
 using Microsoft.Extensions.DependencyInjection;
 using myfancyproj.Actors;
@@ -15,11 +16,11 @@ namespace web4fancyproj
 
         public static void Create(ServiceProvider provider)
         {
-            var eventPusher = provider.GetService<IEventPusher>();
+            //var eventPusher = provider.GetService<IEventPusher>();
 
             _paasActorSystem = ActorSystem.Create("Paas");
             Paas = _paasActorSystem.ActorOf(Props.Create(() => new PaasActor()));
-            SignalRBridge = _paasActorSystem.ActorOf(Props.Create(()=> new SignalRBridgeActor(eventPusher, Paas)), "SignalRBridgeActor");
+            SignalRBridge = _paasActorSystem.ActorOf(Props.Create(()=> new SignalRBridgeActor(provider, Paas)), "SignalRBridgeActor");
         }
 
         public static void Shutdown()

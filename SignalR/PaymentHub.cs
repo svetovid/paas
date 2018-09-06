@@ -1,16 +1,17 @@
 using System;
+using System.Threading.Tasks;
 using Akka.Actor;
 using Microsoft.AspNetCore.SignalR;
 using myfancyproj.Messages;
 
 namespace web4fancyproj.SignalR
 {
-    public class EchoHub : Hub
+    public class PaymentHub : Hub
     {
-        public void Echo(string message)
-        {
-            Clients.All.SendAsync("Send", message);
-        }
+        // public void Echo(string message)
+        // {
+        //     Clients.All.SendAsync("Send", message);
+        // }
 
         public void Deposit(int amount)
         {
@@ -20,6 +21,12 @@ namespace web4fancyproj.SignalR
                 Context);
             
             PaasActorSystem.SignalRBridge.Tell(request);
+        }
+
+        public async Task UpdateStatus(object message)
+        {
+            Console.WriteLine("PaymentHub {0}", message);
+            await Clients.All.SendAsync("UpdateStatus", message);
         }
     }
 }

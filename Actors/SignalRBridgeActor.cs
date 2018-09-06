@@ -1,5 +1,6 @@
 using System;
 using Akka.Actor;
+using Microsoft.Extensions.DependencyInjection;
 using myfancyproj.Messages;
 using web4fancyproj.SignalR;
 
@@ -9,7 +10,7 @@ namespace myfancyproj.Actors
     {
         private string _connectionId;
 
-        public SignalRBridgeActor(IEventPusher eventPusher, IActorRef paasActor)
+        public SignalRBridgeActor(ServiceProvider provider, IActorRef paasActor)
         {
             Receive<PaymentRequest>(msg => {
                 Console.WriteLine("Connection id: {0}", msg.HubContext.ConnectionId);
@@ -22,6 +23,7 @@ namespace myfancyproj.Actors
             Receive<PaymentStatus>(msg => {
                 Console.WriteLine("Payment status connection id: {0}", _connectionId);
 
+                var eventPusher = provider.GetService<IEventPusher>();
                 eventPusher.UpdateStatus(_connectionId, msg.Status);
                 Console.WriteLine("SignalRBridgeActor Status changed {0}: {1}", msg.PaymentReference, msg.Status);
             });
