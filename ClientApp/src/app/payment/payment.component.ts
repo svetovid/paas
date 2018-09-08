@@ -17,13 +17,11 @@ export class PaymentComponent implements OnInit {
     this.hubConnection = builder.withUrl("/hubs/payment").build();
 
     this.hubConnection.on("UpdateStatus", status => {
-      alert(status);
       this.messages.push(`Current payment status: ${status} at ${new Date()}`);
     });
 
-    this.hubConnection.onclose(err => this.messages.push(`Connection closed: ${err.message} at ${new Date()}`));
-    //this.hubConnection.serverTimeoutInMilliseconds = 300000;
-    this.hubConnection.start();
+    this.hubConnection.onclose(err => console.log(`Connection closed: ${err.message} at ${new Date()}`));
+    this.hubConnection.start().catch(err => console.log(err.message));
   }
 
   submit(): void {

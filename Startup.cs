@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using myfancyproj.Actors;
 using web4fancyproj.SignalR;
 
 namespace web4fancyproj
@@ -26,11 +27,7 @@ namespace web4fancyproj
 
             services.AddSignalR();
 
-            services.AddSingleton<IEventPusher, EventPusher>();
-            // services.AddTransient<IHubContext<EchoHub>, HubContext<EchoHub>>();
-
-            var serviceProvider = services.BuildServiceProvider();
-            PaasActorSystem.Create(serviceProvider);
+            services.AddSingleton<PaasActorSystem>();
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

@@ -12,11 +12,7 @@ namespace web4fancyproj.Controllers
     public class SampleDataController : Controller
     {
         private readonly IHubContext<PaymentHub> _hubContext;
-
-        public SampleDataController(IHubContext<PaymentHub> hubContext)
-        {
-            _hubContext = hubContext;
-        }
+        
         private static string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
@@ -26,7 +22,6 @@ namespace web4fancyproj.Controllers
         public IEnumerable<WeatherForecast> WeatherForecasts()
         {
             var rng = new Random();
-            _hubContext.Clients.All.SendAsync("UpdateStatus", "Test");
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 DateFormatted = DateTime.Now.AddDays(index).ToString("d"),

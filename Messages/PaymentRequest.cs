@@ -7,18 +7,18 @@ namespace myfancyproj.Messages
         public PaymentRequest(string siteName, 
             PaymentInformation payment, 
             CustomerInformation customer,
-            HubCallerContext hubContext)
+            string connectionId)
         {
             SiteName = siteName;
             Payment = payment;
             Customer = customer;
-            HubContext = hubContext;
+            ConnectionId = connectionId;
         }
 
         public string SiteName { get; }
 
         public PaymentInformation Payment { get; }
         public CustomerInformation Customer { get; }
-        public HubCallerContext HubContext { get; }
+        public string ConnectionId { get; }
     }
 }
