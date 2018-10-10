@@ -1,7 +1,7 @@
 using System;
 using Microsoft.AspNetCore.SignalR;
 
-namespace web4fancyproj.SignalR 
+namespace web4fancyproj.SignalR
 {
     public class EventPusher : IEventPusher
     {
@@ -15,7 +15,7 @@ namespace web4fancyproj.SignalR
         public void UpdateStatus(string connectionId, string status)
         {
             Console.WriteLine("Event pusher - payment updated: {0}", status);
-            
+
            _hubContext.Clients.All.SendAsync("UpdateStatus", status);
         }
     }

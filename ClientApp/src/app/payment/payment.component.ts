@@ -13,7 +13,7 @@ export class PaymentComponent implements OnInit {
 
   ngOnInit(): void {
     let builder = new HubConnectionBuilder();
-    
+
     this.hubConnection = builder.withUrl("/hubs/payment").build();
 
     this.hubConnection.on("UpdateStatus", status => {

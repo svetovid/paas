@@ -12,7 +12,7 @@ namespace web4fancyproj.Controllers
     public class SampleDataController : Controller
     {
         private readonly IHubContext<PaymentHub> _hubContext;
-        
+
         private static string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"

@@ -18,7 +18,7 @@ namespace myfancyproj.Actors
 
                 int code = 0;
                 string statusMessage = "";
-                
+
                 if (msg.Payment.PaymentAmount == 42)
                 {
                     code = 10005;

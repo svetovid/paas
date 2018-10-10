@@ -1,0 +1,63 @@
+﻿akka {
+    actor {
+        provider = "Akka.Cluster.ClusterActorRefProvider, Akka.Cluster"
+
+        serializers {
+            hyperion = "Akka.Serialization.HyperionSerializer, Akka.Serialization.Hyperion"
+        }
+        serialization-bindings {
+            "System.Object" = hyperion
+        }
+        serialization-identifiers {
+            "Akka.Serialization.HyperionSerializer, Akka.Serialization.Hyperion" = 13
+        }
+
+        deployment {
+            /persistor {
+                router = round-robin-pool
+                nr-of-instances = 10
+                cluster {
+                    enabled = on
+                    max-nr-of-instances-per-node = 1
+                    use-role = persistor
+                }
+            }
+        }
+    }
+
+    remote {
+        dot-netty.tcp {
+            transport-class = "Akka.Remote.Transport.DotNetty.TcpTransport, Akka.Remote"
+            applied-adapters = []
+            transport-protocol = tcp
+            hostname = "127.0.0.1"
+            port = 5888
+        }
+    }
+
+    cluster {
+        seed-nodes = ["akka.tcp://ras@127.0.0.1:4053", "akka.tcp://ras@127.0.0.1:4044"]
+        roles = [api]
+    }
+
+    akka.persistence{
+        journal {
+            plugin = "akka.persistence.journal.sql-server"
+            sql-server {
+                class = "Akka.Persistence.SqlServer.Journal.SqlServerJournal, Akka.Persistence.SqlServer"
+                schema-name = dbo
+                auto-initialize = on
+                connection-string = "Data Source=(LocalDB)\\v11.0;AttachDbFilename=|DataDirectory|\\AkkaChat.mdf;Integrated Security=True"
+            }
+        }
+        snapshot-store {
+            plugin = "akka.persistence.snapshot-store.sql-server"
+            sql-server {
+                class = "Akka.Persistence.SqlServer.Snapshot.SqlServerSnapshotStore, Akka.Persistence.SqlServer"
+                schema-name = dbo
+                auto-initialize = on
+                connection-string = "Data Source=(LocalDB)\\v11.0;AttachDbFilename=|DataDirectory|\\AkkaChat.mdf;Integrated Security=True"
+            }
+        }
+    }
+}

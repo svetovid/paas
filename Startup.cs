@@ -62,7 +62,7 @@ namespace web4fancyproj
 
             app.UseSignalR(routes => {
                 routes.MapHub<PaymentHub>("/hubs/payment");
-            }); 
+            });
 
             app.UseSpa(spa =>
             {

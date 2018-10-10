@@ -1,5 +1,6 @@
 using System;
 using Akka.Actor;
+using Akka.Persistence;
 using myfancyproj.Messages;
 
 namespace myfancyproj.Actors
@@ -9,12 +10,14 @@ namespace myfancyproj.Actors
         private Payment _payment;
 
         private IActorRef _validationActor;
-        
+
         private IActorRef _pspActor;
 
         private IActorRef _sender;
 
-        public PaymentActor(IActorRef sender, IActorRef validationActor, IActorRef pspActor)
+        //public override string PersistenceId => _payment.PaymentReference;
+
+        public PaymentActor(string paymentReference, IActorRef sender, IActorRef validationActor, IActorRef pspActor)
         {
             _sender = sender;
             _validationActor = validationActor;
@@ -28,7 +31,8 @@ namespace myfancyproj.Actors
         private void Initiated()
         {
             Console.WriteLine("PaymentActor before Initiated");
-            Receive<PaymentRequest>(msg => {
+            Receive<PaymentRequest>(msg =>
+            {
                 Console.WriteLine("PaymentActor Initiated {0}", msg.Payment.PaymentReference);
                 _payment.PaymentReference = msg.Payment.PaymentReference;
                 _payment.CustomerReference = msg.Customer.CustomerReference;
@@ -39,7 +43,7 @@ namespace myfancyproj.Actors
                 //ValidationActor tell payment request
                 _validationActor.Tell(msg);
 
-               Become(Created); 
+                Become(Created);
             });
         }
 
@@ -52,7 +56,7 @@ namespace myfancyproj.Actors
                     _sender.Tell(new PaymentStatus(_payment.PaymentReference, "Created"));
 
                     //PSPActor tell payment request
-                    var request = new PaymentRequest("test.com", 
+                    var request = new PaymentRequest("test.com",
                         new PaymentInformation("EUR",0,"EUR",0,"EUR",0,"VISA",1,2,DateTime.UtcNow,DateTime.UtcNow,string.Empty,string.Empty,0,"EUR",1),
                         new CustomerInformation("SE", Guid.NewGuid().ToString()),
                         null);
@@ -89,5 +93,15 @@ namespace myfancyproj.Actors
 
             Self.GracefulStop(TimeSpan.FromSeconds(20));
         }
+
+        //protected override bool ReceiveRecover(object message)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //protected override bool ReceiveCommand(object message)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

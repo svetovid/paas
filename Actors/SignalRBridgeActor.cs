@@ -15,7 +15,7 @@ namespace myfancyproj.Actors
             Receive<PaymentRequest>(msg => {
                 Console.WriteLine("Connection id: {0}", msg.ConnectionId);
                 _connectionId = msg.ConnectionId;
-                
+
                 Console.WriteLine("SignalRBridgeActor");
                 paasActor.Tell(msg);
             });
