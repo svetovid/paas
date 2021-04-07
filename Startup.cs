@@ -47,13 +47,18 @@ namespace web4fancyproj
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseSpaStaticFiles();
+            if (!env.IsDevelopment())
+            {
+                app.UseSpaStaticFiles();
+            }
 
             app.UseRouting();
 
             app.UseEndpoints(endpoints => {
                 endpoints.MapHub<PaymentHub>("/hubs/payment");
-                endpoints.MapControllers();
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "api/{controller}/{id?}");
             });
 
             app.UseSpa(spa =>

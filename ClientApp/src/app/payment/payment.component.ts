@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr';
+import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 
 @Component({
   selector: 'payment',
@@ -7,9 +7,9 @@ import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr';
 })
 export class PaymentComponent implements OnInit {
 
-  public hubConnection: HubConnection;
-  public messages: string[] = [];
-  public amount: string;
+  hubConnection: HubConnection | undefined;
+  messages: string[] = [];
+  amount: string = "";
 
   ngOnInit(): void {
     let builder = new HubConnectionBuilder();
@@ -20,12 +20,14 @@ export class PaymentComponent implements OnInit {
       this.messages.push(`Current payment status: ${status} at ${new Date()}`);
     });
 
-    this.hubConnection.onclose(err => console.log(`Connection closed: ${err.message} at ${new Date()}`));
+    this.hubConnection.onclose(err => console.log(`Connection closed: ${err?.message} at ${new Date()}`));
     this.hubConnection.start().catch(err => console.log(err.message));
   }
 
   submit(): void {
-    this.hubConnection.invoke("Deposit", this.amount);
-    this.amount = "";
+    if (this.hubConnection) {
+      this.hubConnection.invoke("Deposit", this.amount);
+      this.amount = "";
+    }
   }
 }
